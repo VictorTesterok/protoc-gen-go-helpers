@@ -205,7 +205,9 @@ func generateHelpers(gen *protogen.Plugin, file *protogen.File) *protogen.Genera
 			g.P()
 			g.P("func (x *", msg.GoIdent, ")  GetPostgresqlFilter() string {")
 			g.P("query := \" LIMIT $1, $2\"")
+
 			// TODO: ADD FILTER
+
 			g.P("return query")
 			g.P("}")
 			g.P()
