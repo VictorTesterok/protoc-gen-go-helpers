@@ -167,7 +167,7 @@ func (m mod) Execute(targets map[string]pgs.File, packages map[string]pgs.Packag
 							group.Return(Id("opts"))
 						})
 
-						/*file.Func().Params(Id("x").Op("*").Id(modelName)).Id("GetPostgresqlFilter").Params().Params(String()).BlockFunc(func(group *Group) {
+						file.Func().Params(Id("x").Op("*").Id(modelName)).Id("GetPostgresqlFilter").Params().Params(String()).BlockFunc(func(group *Group) {
 							group.Id("query").Op(":=").Lit(" LIMIT $1, $2")
 							for _, field := range feature.fieldsList {
 								if field.Name == "skip" || field.Name == "limit" {
@@ -193,19 +193,19 @@ func (m mod) Execute(targets map[string]pgs.File, packages map[string]pgs.Packag
 							group.Return(Id("query"))
 						})
 
-						file.Func().Params(Id("x").Op("*").Id(modelName)).Id("GetPostgresqlOptions").Params().Op("[]").Interface().BlockFunc(func(group *Group) {
-							group.Var().Id("opts").Id("=").Interface()
+						file.Func().Params(Id("x").Op("*").Id(modelName)).Id("GetPostgresqlOptions").Params().Op("[]").Index().Interface().BlockFunc(func(group *Group) {
+							group.Var().Id("opts").Id("=").Index().Interface().Op("{}")
 							if feature.parser.GetList() {
 								group.Var().Id("limit").Int64().Op("=").Lit(20)
 								group.If(Id("x").Dot("Limit").Op(">").Lit(0)).Block(
 									Id("limit").Op("=").Id("x").Dot("Limit"),
 								)
-								group.Id("opts").Dot("append").Call(Id("opts"), Id("limit"))
-								group.Id("opts").Dot("append").Call(Id("opts"), Id("x").Dot("Skip"))
+								group.Id("opts").Op("=").Append(Id("opts"), Id("limit"))
+								group.Id("opts").Op("=").Id("append").Call(Id("opts"), Id("x").Dot("Skip"))
 								//group.Id("opts").Dot("SetSort").Call(Qual(pathToBson, "M").Values(Dict{Lit("_id"): Lit(1)}))
 							}
 							group.Return(Id("opts"))
-						})*/
+						})
 					}
 					if feature.parser.GetMerge() || feature.parser.GetMergeFrom() != "" {
 						file.Func().Params(
