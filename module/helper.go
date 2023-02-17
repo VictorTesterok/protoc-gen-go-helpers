@@ -167,31 +167,31 @@ func (m mod) Execute(targets map[string]pgs.File, packages map[string]pgs.Packag
 							group.Return(Id("opts"))
 						})
 
-						//file.Func().Params(Id("x").Op("*").Id(modelName)).Id("GetPostgresqlFilter").Params().Params(String()).BlockFunc(func(group *Group) {
-						//	group.Id("query").Op(":=").Lit(" LIMIT $1, $2")
-						//	for _, field := range feature.fieldsList {
-						//		if field.Name == "skip" || field.Name == "limit" {
-						//			continue
-						//		}
-						//		switch field.ProtoType {
-						//		case "TYPE_UINT32":
-						//			group.If(Id("x").Dot(Pascal(field.Name)).Op(">").Lit(0)).BlockFunc(func(group2 *Group) {
-						//				group2.Id("query").Index(Lit(field.Name)).Op("=").Id("x").Dot(Pascal(field.Name))
-						//			})
-						//		case "TYPE_STRING":
-						//			group.If(Len(Id("x").Dot(Pascal(field.Name))).Op(">").Lit(0)).BlockFunc(func(group2 *Group) {
-						//				group2.Id("query").Index(Lit(field.Name)).Op("=").Qual(pathToPrimitive, "Regex").Values(DictFunc(func(dict Dict) {
-						//					dict[Id("Pattern")] = Id("x").Dot(Pascal(field.Name))
-						//					dict[Id("Options")] = Lit("")
-						//				}))
-						//			})
-						//		default:
-						//		}
-						//		m.Debug(modelName, field.Name, field.Type)
-						//	}
-						//
-						//	group.Return(Id("query"))
-						//})
+						file.Func().Params(Id("x").Op("*").Id(modelName)).Id("GetPostgresqlFilter").Params().Params(String()).BlockFunc(func(group *Group) {
+							group.Id("query").Op(":=").Lit(" LIMIT $1, $2")
+							for _, field := range feature.fieldsList {
+								if field.Name == "skip" || field.Name == "limit" {
+									continue
+								}
+								switch field.ProtoType {
+								case "TYPE_UINT32":
+									group.If(Id("x").Dot(Pascal(field.Name)).Op(">").Lit(0)).BlockFunc(func(group2 *Group) {
+										group2.Id("query").Index(Lit(field.Name)).Op("=").Id("x").Dot(Pascal(field.Name))
+									})
+								case "TYPE_STRING":
+									group.If(Len(Id("x").Dot(Pascal(field.Name))).Op(">").Lit(0)).BlockFunc(func(group2 *Group) {
+										group2.Id("query").Index(Lit(field.Name)).Op("=").Qual(pathToPrimitive, "Regex").Values(DictFunc(func(dict Dict) {
+											dict[Id("Pattern")] = Id("x").Dot(Pascal(field.Name))
+											dict[Id("Options")] = Lit("")
+										}))
+									})
+								default:
+								}
+								m.Debug(modelName, field.Name, field.Type)
+							}
+
+							group.Return(Id("query"))
+						})
 
 						file.Func().Params(Id("x").Op("*").Id(modelName)).Id("GetPostgresqlOptions").Params().Op("[]").Interface().BlockFunc(func(group *Group) {
 							group.Var().Id("opts").Id("=").Interface()
