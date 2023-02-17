@@ -193,8 +193,8 @@ func (m mod) Execute(targets map[string]pgs.File, packages map[string]pgs.Packag
 							group.Return(Id("query"))
 						})
 
-						file.Func().Params(Id("x").Op("*").Id(modelName)).Id("GetPostgresqlOptions").Params().Op("[]").Index().Interface().BlockFunc(func(group *Group) {
-							group.Var().Id("opts").Id("=").Index().Interface().Op("{}")
+						file.Func().Params(Id("x").Op("*").Id(modelName)).Id("GetPostgresqlOptions").Params().Index().Interface().BlockFunc(func(group *Group) {
+							group.Var().Id("opts").Index().Interface().Op("{}")
 							if feature.parser.GetList() {
 								group.Var().Id("limit").Int64().Op("=").Lit(20)
 								group.If(Id("x").Dot("Limit").Op(">").Lit(0)).Block(
