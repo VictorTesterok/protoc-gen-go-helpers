@@ -167,7 +167,7 @@ func (m mod) Execute(targets map[string]pgs.File, packages map[string]pgs.Packag
 							group.Return(Id("opts"))
 						})
 
-						file.Func().Params(Id("x").Op("*").Id(modelName)).Id("GetPostgresqlFilter").Params().Params(String()).BlockFunc(func(group *Group) {
+						/*file.Func().Params(Id("x").Op("*").Id(modelName)).Id("GetPostgresqlFilter").Params().Params(String()).BlockFunc(func(group *Group) {
 							group.Id("query").Op(":=").Lit(" LIMIT $1, $2")
 							for _, field := range feature.fieldsList {
 								if field.Name == "skip" || field.Name == "limit" {
@@ -205,7 +205,7 @@ func (m mod) Execute(targets map[string]pgs.File, packages map[string]pgs.Packag
 								//group.Id("opts").Dot("SetSort").Call(Qual(pathToBson, "M").Values(Dict{Lit("_id"): Lit(1)}))
 							}
 							group.Return(Id("opts"))
-						})
+						})*/
 					}
 					if feature.parser.GetMerge() || feature.parser.GetMergeFrom() != "" {
 						file.Func().Params(
